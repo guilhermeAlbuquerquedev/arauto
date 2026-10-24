@@ -21,3 +21,27 @@ async function connect() {
 }
 
 connect();
+
+//Avisos
+//Função para selecionar todos os avisos do banco de dados
+async function selectNotices(){
+    const client = await connect();
+    const res = await client.query('SELECT * FROM avisos') 
+    return res.rows;
+    client.release();    //Liberando a conexão
+}
+
+//Inserir um novo aviso no banco de dados
+async function insertNotices(notice){
+    const client = await connect();
+    const sql = 'INSERT INTO avisos (titulo, conteudo, autor_id, disciplina_id) VALUES ($1, $2, $3, $4)';
+    const res = await client.query(sql, [notice.titulo, notice.conteudo, notice.autor_id, notice.disciplina_id]);
+    client.release();
+}
+
+
+
+module.exports = {
+    selectNotices,
+    insertNotices
+}
